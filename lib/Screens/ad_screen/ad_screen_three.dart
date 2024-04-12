@@ -2,12 +2,35 @@ import 'dart:ui';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:flutter/material.dart';
 // import 'package:tablet/NavBar/second_navbar.dart';
+import 'package:chewie/chewie.dart';
+import 'package:tablet/controllers/ad_screen_controller.dart';
 
 class Add3Screen extends StatelessWidget {
   const Add3Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
+      future: AdScreenController().getVideoData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } 
+        
+        else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } 
+        
+        else {
+          return adHomeScreen(context, snapshot.data);
+        }
+      },
+    );
+  }
+
+  Widget adHomeScreen(BuildContext context, dynamic videoPlayerController) {
     return SingleChildScrollView(
       child: Container(
       decoration: const BoxDecoration(
@@ -30,51 +53,69 @@ class Add3Screen extends StatelessWidget {
                   height: 660,
                   width: 1216,
                   child: Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("asset/addthree.png"),
-                            fit: BoxFit.cover),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
+                    child: Stack(
+                        children: [
+                          Chewie(
+                            controller: videoPlayerController,
+                          ),
+                          
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+
+                                  children: [
+                                    RawMaterialButton(
+                                      onPressed: () {},
+                                      elevation: 2.0,
+                                      fillColor:
+                                          const Color.fromARGB(255, 234, 243, 248),
+                                      padding: const EdgeInsets.all(15.0),
+                                      shape: const CircleBorder(),
+                                      child: const Icon(
+                                        Icons.thumb_up,
+                                        size: 28.0,
+                                      ),
+                                    ),
+
+                                    const SizedBox(width: 15),
+                                  ],
+                                ),
+                                
+                                const SizedBox(
+                                  height: 12,
+                                ),
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    RawMaterialButton(
+                                      onPressed: () {},
+                                      elevation: 2.0,
+                                      fillColor:
+                                          const Color.fromARGB(255, 234, 243, 248),
+                                      padding: const EdgeInsets.all(15.0),
+                                      shape: const CircleBorder(),
+                                      child: const Icon(
+                                        Icons.thumb_down,
+                                        size: 28.0,
+                                      ),
+                                    ),
+
+                                    const SizedBox(width: 15)
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RawMaterialButton(
-                              onPressed: () {},
-                              elevation: 2.0,
-                              fillColor:
-                                  const Color.fromARGB(255, 234, 243, 248),
-                              padding: const EdgeInsets.all(15.0),
-                              shape: const CircleBorder(),
-                              child: const Icon(
-                                Icons.thumb_up,
-                                size: 28.0,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            RawMaterialButton(
-                              onPressed: () {},
-                              elevation: 2.0,
-                              fillColor:
-                                  const Color.fromARGB(255, 234, 243, 248),
-                              padding: const EdgeInsets.all(15.0),
-                              shape: const CircleBorder(),
-                              child: const Icon(
-                                Icons.thumb_down,
-                                size: 28.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    
                   ),
                 ),
               )

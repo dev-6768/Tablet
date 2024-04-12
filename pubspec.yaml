@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.6
   slide_to_act: ^2.0.2
   gradient_borders: ^1.0.0
+  chewie: ^1.8.1
+  video_player: ^2.8.6
 
 dev_dependencies:
   flutter_test:
